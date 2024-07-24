@@ -46,3 +46,16 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+// Controlador para obtener una reseña por ID
+exports.getReviewById = async (req, res) => {
+  const { reviewId } = req.params;
+  try {
+    const review = await Review.findById(reviewId).populate('user').populate('book');
+    if (!review) {
+      return res.status(404).json({ message: 'Reseña no encontrada' });
+    }
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al recuperar la reseña', error });
+  }
+};
